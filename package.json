@@ -63,7 +63,7 @@
     "tools",
     "coding",
     "code",
-    "vscode",
+    "vscode"
   ],
   "activationEvents": [
     "onStartupFinished"
