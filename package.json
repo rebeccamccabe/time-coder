@@ -2,7 +2,7 @@
   "name": "timecoder",
   "displayName": "TimeCoder",
   "description": "TimeCoder is a VS Code extension designed to boost your productivity while coding. It features a stopwatch to track how long you take to solve problems or complete tasks, and a Pomodoro timer to challenge yourself to finish tasks within a set time — all wrapped in a visually appealing UI.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "publisher": "DjArtimus",
   "repository": {
