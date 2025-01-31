@@ -1,0 +1,124 @@
+{
+  "name": "timecoder",
+  "displayName": "TimeCoder",
+  "description": "TimeCoder is a VS Code extension designed to boost your productivity while coding. It features a stopwatch to track how long you take to solve problems or complete tasks, and a Pomodoro timer to challenge yourself to finish tasks within a set time — all wrapped in a visually appealing UI.",
+  "version": "0.0.1",
+  "license": "MIT",
+  "publisher": "DjArtimus",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dj-Artimus/time-coder"
+  },
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "icon": "timeCoderIcon.jpg",
+  "keywords": [
+    "pomodoro timer",
+    "pomodoro",
+    "pomodoro technique",
+    "pomodoro method",
+    "timer",
+    "alarm",
+    "productivity",
+    "focus",
+    "work",
+    "break",
+    "rest",
+    "task",
+    "management",
+    "planning",
+    "schedule",
+    "routine",
+    "session",
+    "study",
+    "concentration",
+    "motivation",
+    "creativity",
+    "development",
+    "programming",
+    "developer tools",
+    "coding"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "timeCoder",
+          "title": "Time Coder",
+          "icon": "timeCoderIcon.svg"
+        }
+      ]
+    },
+    "views": {
+      "timeCoder": [
+        {
+          "type": "webview",
+          "id": "timeCoderSidePanel",
+          "name": "Time Coder"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "timeCoder.openSidebar",
+        "title": "Open Sidebar View"
+      },
+      {
+        "command": "timeCoder.startSessionTimer",
+        "title": "Start Session Timer"
+      },
+      {
+        "command": "timeCoder.toggleTimer",
+        "title": "Toggle Timer"
+      },
+      {
+        "command": "timeCoder.resetTimer",
+        "title": "Reset Timer"
+      },
+      {
+        "command": "timeCoder.adjustPomodoroTimeIncrease",
+        "title": "Increase Pomodoro Time"
+      },
+      {
+        "command": "timeCoder.adjustPomodoroTimeDecrease",
+        "title": "Decrease Pomodoro Time"
+      },
+      {
+        "command": "timeCoder.toggleMode",
+        "title": "Toggle Mode"
+      },
+      {
+        "command": "timeCoder.openWebview",
+        "title": "Open Webview"
+      },
+      {
+        "command": "timeCoder.openAnalytics",
+        "title": "Open Analytics"
+      }
+    ]
+  },
+  "scripts": {
+    "watch": "code .",
+    "package": "vsce package",
+    "publish": "vsce publish",
+    "lint": "eslint .",
+    "pretest": "pnpm run lint",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.96.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "eslint": "^9.16.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1"
+  }
+}
