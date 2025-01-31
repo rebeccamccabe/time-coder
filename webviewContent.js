@@ -134,11 +134,9 @@ function generateWebviewHtml() {
         </div>
         <div id="session-tracker-content" class="content">
             <div class="timer-display" id="session-display">00:00:00</div>
-            {/* <div style="font-size: large; display: flex; justify-content: center; align-items: center;">
-                <label style="font-size: larger;" for="session-notes">Task:</label>
-                <input type="text" id="session-notes" class="taskInput" placeholder=" Name the current Session">
-                <button onclick="postMessage('saveSession')">Save</button>
-            </div> */}
+            <div class="buttons-bar">
+                <button onclick="postMessage('resetSession')">Reset</button>
+            </div>
         </div>
     </div>
 
