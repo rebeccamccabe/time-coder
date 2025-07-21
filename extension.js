@@ -1,9 +1,9 @@
 const vscode = require('vscode');
 
 let mode = 'stopwatch'; // 'stopwatch' or 'pomodoro'
-let pomodoroDuration = 1200; // Pomodoro timer in seconds
-let pomodoroTime = 1200; // Pomodoro timer in seconds
-let stopwatchTime = 0; // Stopwatch timer in seconds
+let pomodoroDuration = 1200; // Pomodoro timer in seconds (multiplied by 10)
+let pomodoroTime = 1200; // Current pomodoro time remaining (multiplied by 10)
+let stopwatchTime = 0; // Stopwatch timer in seconds (multiplied by 10)
 let sessionStartTime;
 let sessionInterval;
 let getContext;
@@ -179,7 +179,7 @@ function resetTimer() {
 	} else if (mode === 'pomodoro') {
 		const remaining = formatTime((pomodoroDuration - pomodoroTime) / 10);
 		storeHistory("pomodoro", remaining);
-		pomodoroTime = 1200;
+		pomodoroTime = pomodoroDuration;
 		clearInterval(pomodoroState.interval);
 		pomodoroState.timerRunning = false;
 	} else if (mode === 'session') {
@@ -263,7 +263,12 @@ function Communicator(webviewPanel) {
 
 	const updateTimersInWebview = () => {
 		const stopwatch = { timmerRunning: stopwatchState.timerRunning, time: formatTime(stopwatchTime / 10) };
-		const pomodoro = { timmerRunning: pomodoroState.timerRunning, time: formatTime(pomodoroTime / 10) }
+		const pomodorofracRemaining = Math.floor(pomodoroTime / 10) / Math.floor(pomodoroDuration / 10);
+		const pomodoro = { 
+			timmerRunning: pomodoroState.timerRunning, 
+			time: formatTime(pomodoroTime / 10),
+			fracRemaining: pomodorofracRemaining
+		}
 		const statusBarData = {
 			mode,
 			stopwatch,

@@ -154,6 +154,39 @@ function getSidePanelHtmlContent() {
             font-weight: bold;
         }
 
+        .pomodoro-visual-timer {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .pomodoro-visual-timer.active {
+            opacity: 1;
+        }
+
+        .circular-progress {
+            width: 100%;
+            height: 100%;
+        }
+
+        .progress-bg {
+            fill: none;
+            stroke: var(--vscode-editor-foreground);
+            stroke-width: 4;
+            opacity: 0.2;
+        }
+
+        .progress-bar {
+            fill: var(--vscode-button-background);
+            stroke: none;
+            transition: d 1s ease;
+        }
+
         .controls {
             position: relative;
             bottom: 0;
@@ -281,6 +314,11 @@ function getSidePanelHtmlContent() {
                 font-size: 5rem;
             }
 
+            .pomodoro-visual-timer {
+                width: 180px;
+                height: 180px;
+            }
+
             .controls {
                 transform: translateY(55%);
                 width: 100%;
@@ -340,6 +378,14 @@ function getSidePanelHtmlContent() {
                 <div id="stopwatch-display" class="timer active">00:00:00</div>
                 <div id="pomodoro-display" class="timer">00:00:00</div>
                 <div id="session-display" class="timer">00:00:00</div>
+                
+                <!-- Visual Timer for Pomodoro -->
+                <div class="pomodoro-visual-timer" id="pomodoro-visual-timer">
+                    <svg class="circular-progress" viewBox="0 0 200 200">
+                        <circle class="progress-bg" cx="100" cy="100" r="90"></circle>
+                        <path class="progress-bar" id="progress-circle"></path>
+                    </svg>
+                </div>
 
 
                 <!-- Controls -->
@@ -638,6 +684,8 @@ function getSidePanelHtmlContent() {
                 const line2 = document.getElementById(tab + "-line2");
                 const timer = document.getElementById(tab + "-display");
                 const controls = document.getElementById(tab + "-buttons");
+                const visualTimer = document.getElementById("pomodoro-visual-timer");
+                
                 if (tab === newTab) {
                     element.classList.add("active");
                     timer.classList.add("active");
@@ -645,6 +693,13 @@ function getSidePanelHtmlContent() {
                     element.removeAttribute("title");
                     line1.classList.remove("hidden");
                     line2.classList.remove("hidden");
+                    
+                    // Show visual timer only for pomodoro
+                    if (tab === "pomodoro") {
+                        visualTimer.classList.add("active");
+                    } else {
+                        visualTimer.classList.remove("active");
+                    }
 
                 } else {
                     element.classList.remove("active");
@@ -675,6 +730,37 @@ function getSidePanelHtmlContent() {
                 document.getElementById("pomodoro-display").innerHTML = pomodoro.time.split(" ").join("");
                 document.getElementById("start-stop-Pomodoro").innerHTML = pomodoro.timmerRunning ? "Pause" : "Start";
                 document.getElementById("session-display").innerHTML = sessionElapsed.split(" ").join("");
+                
+                // Update visual timer progress circle
+                const fracRemaining = pomodoro.fracRemaining || 0;
+                const radius = 90;
+                const circumference = 2 * Math.PI * radius;
+                const remainingAngle = fracRemaining * 360;
+                const centerX = 100;
+                const centerY = 100;
+                const topY = centerY - radius;
+                
+                let pathData;
+                if (fracRemaining === 0) {
+                    pathData = '';
+                } else if (fracRemaining >= 1) {
+                    // Full circle
+                    pathData = \`M 100 10 
+                               A \${radius} \${radius} 0 1 1 99.99 10 
+                               Z\`;
+                } else {
+                    // Calculate end point on circle (counter-clockwise from top)
+                    const endX = centerX - radius * Math.sin(remainingAngle * Math.PI / 180);
+                    const endY = centerY - radius * Math.cos(remainingAngle * Math.PI / 180);
+                    const largeArcFlag = remainingAngle > 180 ? 1 : 0;
+
+                    pathData = \`M \${centerX} \${topY} 
+                               A \${radius} \${radius} 0 \${largeArcFlag} 0 \${endX} \${endY} 
+                               L \${centerX} \${centerY} 
+                               Z\`;
+                }
+                
+                document.getElementById("progress-circle").setAttribute('d', pathData);
             }
         });
     </script>
