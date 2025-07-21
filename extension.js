@@ -156,7 +156,7 @@ function toggleTimer() {
 						clearInterval(state.interval);
 						state.timerRunning = false;
 						updateStatusBar();
-						vscode.window.showInformationMessage('Pomodoro timer completed!');
+						vscode.window.showInformationMessage('Pomodoro timer completed!', { modal: true }, 'OK');
 					}
 				}, 100);
 			}
