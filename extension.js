@@ -305,7 +305,7 @@ function Communicator(webviewPanel) {
 			time: formatTime(stopwatchTime / 10),
 			task: currentStopwatchTask
 		};
-		const pomodorofracRemaining = Math.floor(pomodoroTime / 10) / Math.floor(pomodoroDuration / 10);
+		const pomodorofracRemaining = pomodoroTime / pomodoroDuration;
 		const pomodoro = { 
 			timmerRunning: pomodoroState.timerRunning, 
 			time: formatTime(pomodoroTime / 10),
