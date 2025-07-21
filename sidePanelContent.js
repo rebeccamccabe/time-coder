@@ -160,8 +160,10 @@ function getSidePanelHtmlContent() {
             left: 50%;
             top: 20%;
             transform: translate(-50%, -50%);
-            width: 200px;
-            height: 200px;
+            width: 90vw;
+            height: 90vw;
+            max-width: 300px;
+            max-height: 300px;
             opacity: 0;
             pointer-events: none;
             z-index: 1;
@@ -179,7 +181,7 @@ function getSidePanelHtmlContent() {
         .progress-bg {
             fill: none;
             stroke: var(--vscode-editor-foreground);
-            stroke-width: 4;
+            stroke-width: 6;
             opacity: 0.2;
         }
 
@@ -319,8 +321,10 @@ function getSidePanelHtmlContent() {
             }
 
             .pomodoro-visual-timer {
-                width: 180px;
-                height: 180px;
+                width: 80vw;
+                height: 80vw;
+                max-width: 280px;
+                max-height: 280px;
                 top: 35%;
                 z-index: 1;
             }
@@ -387,8 +391,8 @@ function getSidePanelHtmlContent() {
                 
                 <!-- Visual Timer for Pomodoro -->
                 <div class="pomodoro-visual-timer" id="pomodoro-visual-timer">
-                    <svg class="circular-progress" viewBox="0 0 200 200">
-                        <circle class="progress-bg" cx="100" cy="100" r="90"></circle>
+                    <svg class="circular-progress" viewBox="0 0 300 300">
+                        <circle class="progress-bg" cx="150" cy="150" r="130"></circle>
                         <path class="progress-bar" id="progress-circle"></path>
                     </svg>
                 </div>
@@ -739,11 +743,11 @@ function getSidePanelHtmlContent() {
                 
                 // Update visual timer progress circle
                 const fracRemaining = pomodoro.fracRemaining || 0;
-                const radius = 90;
+                const radius = 130;
                 const circumference = 2 * Math.PI * radius;
                 const remainingAngle = fracRemaining * 360;
-                const centerX = 100;
-                const centerY = 100;
+                const centerX = 150;
+                const centerY = 150;
                 const topY = centerY - radius;
                 
                 let pathData;
@@ -751,8 +755,8 @@ function getSidePanelHtmlContent() {
                     pathData = '';
                 } else if (fracRemaining >= 1) {
                     // Full circle
-                    pathData = \`M 100 10 
-                               A \${radius} \${radius} 0 1 1 99.99 10 
+                    pathData = \`M \${centerX} \${topY} 
+                               A \${radius} \${radius} 0 1 1 \${centerX-0.01} \${topY}  
                                Z\`;
                 } else {
                     // Calculate end point on circle (counter-clockwise from top)
