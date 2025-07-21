@@ -8,6 +8,10 @@ let sessionStartTime;
 let sessionInterval;
 let getContext;
 
+// Current task tracking
+let currentPomodoroTask = '';
+let currentStopwatchTask = '';
+
 // Independent states for each mode
 let stopwatchState = {
 	timerRunning: false,
@@ -128,14 +132,37 @@ function startSessionTimer() {
 	}, 500);
 }
 
+// Prompt user for task description
+async function promptForTask(mode) {
+	const task = await vscode.window.showInputBox({
+		prompt: `What task are you working on in ${mode} mode?`,
+		placeHolder: 'Enter task description...',
+		value: mode === 'pomodoro' ? currentPomodoroTask : currentStopwatchTask
+	});
+	
+	if (task !== undefined) { // User didn't cancel
+		if (mode === 'pomodoro') {
+			currentPomodoroTask = task;
+		} else {
+			currentStopwatchTask = task;
+		}
+		return task;
+	}
+	return null; // User cancelled
+}
+
 // Toggle the timer (start/stop)
-function toggleTimer() {
+async function toggleTimer() {
 	if (mode === 'stopwatch') {
 		const state = stopwatchState;
 		// Increment Stopwatch count
 		if (state.timerRunning) {
 			clearInterval(state.interval);
 		} else {
+			// Prompt for task when starting
+			const task = await promptForTask('stopwatch');
+			if (task === null) return; // User cancelled, don't start timer
+			
 			state.interval = setInterval(() => {
 				stopwatchTime++;
 				updateStatusBar();
@@ -148,6 +175,10 @@ function toggleTimer() {
 			if (state.timerRunning) {
 				clearInterval(state.interval);
 			} else {
+				// Prompt for task when starting
+				const task = await promptForTask('pomodoro');
+				if (task === null) return; // User cancelled, don't start timer
+				
 				state.interval = setInterval(() => {
 					if (pomodoroTime / 100 > 0) {
 						pomodoroTime--;
@@ -156,7 +187,12 @@ function toggleTimer() {
 						clearInterval(state.interval);
 						state.timerRunning = false;
 						updateStatusBar();
-						vscode.window.showInformationMessage('Pomodoro timer completed!', { modal: true }, 'OK');
+						vscode.window.showInformationMessage('Pomodoro timer completed! Restart?', { modal: true }, 'OK').then((selection) => {
+							if (selection === 'OK') {
+								pomodoroTime = pomodoroDuration;
+								toggleTimer();
+							}
+						});
 					}
 				}, 100);
 			}
@@ -174,12 +210,14 @@ function resetTimer() {
 		const elapsed = formatTime(stopwatchTime / 10); // Elapsed time
 		storeHistory("stopwatch", elapsed);
 		stopwatchTime = 0;
+		currentStopwatchTask = ''; // Clear task
 		clearInterval(stopwatchState.interval);
 		stopwatchState.timerRunning = false;
 	} else if (mode === 'pomodoro') {
 		const remaining = formatTime((pomodoroDuration - pomodoroTime) / 10);
 		storeHistory("pomodoro", remaining);
 		pomodoroTime = pomodoroDuration;
+		currentPomodoroTask = ''; // Clear task
 		clearInterval(pomodoroState.interval);
 		pomodoroState.timerRunning = false;
 	} else if (mode === 'session') {
@@ -262,12 +300,17 @@ function Communicator(webviewPanel) {
 	);
 
 	const updateTimersInWebview = () => {
-		const stopwatch = { timmerRunning: stopwatchState.timerRunning, time: formatTime(stopwatchTime / 10) };
+		const stopwatch = { 
+			timmerRunning: stopwatchState.timerRunning, 
+			time: formatTime(stopwatchTime / 10),
+			task: currentStopwatchTask
+		};
 		const pomodorofracRemaining = Math.floor(pomodoroTime / 10) / Math.floor(pomodoroDuration / 10);
 		const pomodoro = { 
 			timmerRunning: pomodoroState.timerRunning, 
 			time: formatTime(pomodoroTime / 10),
-			fracRemaining: pomodorofracRemaining
+			fracRemaining: pomodorofracRemaining,
+			task: currentPomodoroTask
 		}
 		const statusBarData = {
 			mode,

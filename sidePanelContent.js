@@ -39,7 +39,7 @@ function getSidePanelHtmlContent() {
         main {
             display: flex;
             flex-direction: column;
-            gap: 30px;
+            gap: 40px;
             align-items: center;
             justify-content: space-around;
             padding-top: 5%;
@@ -155,6 +155,41 @@ function getSidePanelHtmlContent() {
             z-index: 10;
         }
 
+        .task-displays {
+            position: relative;
+            width: 100%;
+            min-height: 62px;
+            height: auto;
+            margin-top: -150px;
+            z-index: 15;
+            overflow: visible;
+        }
+
+        .task-display {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            font-size: 12px;
+            color: black;
+            text-align: center;
+            white-space: normal;
+            overflow: hidden;
+            word-wrap: break-word;
+            width: 90%;
+            height: auto;
+            min-height: 62px;
+            z-index: 10;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+        }
+
+        .task-display.active {
+            opacity: 1;
+        }
+
         .pomodoro-visual-timer {
             position: absolute;
             left: 50%;
@@ -195,7 +230,7 @@ function getSidePanelHtmlContent() {
             bottom: 0;
             width: 110%;
             height: 100%;
-            transform: translateY(85%);
+            transform: translateY(110%);
         }
 
         .control-buttons.active {
@@ -319,6 +354,14 @@ function getSidePanelHtmlContent() {
                 z-index: 10;
             }
 
+            .task-display {
+                font-size: 14px;
+                width: 85%;
+                max-height: 73px;
+                line-height: 1.3;
+                -webkit-line-clamp: 4;
+            }
+
             .pomodoro-visual-timer {
                 width: 80vw;
                 height: 80vw;
@@ -329,7 +372,7 @@ function getSidePanelHtmlContent() {
             }
 
             .controls {
-                transform: translateY(85%);
+                transform: translateY(110%);
                 width: 100%;
             }
 
@@ -418,6 +461,13 @@ function getSidePanelHtmlContent() {
                         <button class="control-btn" id="resetSession">Reset</button>
                     </div>
                 </div>
+            </div>
+            
+            <!-- Task displays -->
+            <div class="task-displays">
+                <div id="stopwatch-task" class="task-display">No task</div>
+                <div id="pomodoro-task" class="task-display active">No task</div>
+                <div id="session-task" class="task-display">No task</div>
             </div>
             <div class="fortune">
                 <p id="fortune"></p>
@@ -692,12 +742,14 @@ function getSidePanelHtmlContent() {
                 const line1 = document.getElementById(tab + "-line1");
                 const line2 = document.getElementById(tab + "-line2");
                 const timer = document.getElementById(tab + "-display");
+                const taskDisplay = document.getElementById(tab + "-task");
                 const controls = document.getElementById(tab + "-buttons");
                 const visualTimer = document.getElementById("pomodoro-visual-timer");
                 
                 if (tab === newTab) {
                     element.classList.add("active");
                     timer.classList.add("active");
+                    taskDisplay.classList.add("active");
                     controls.classList.add("active");
                     element.removeAttribute("title");
                     line1.classList.remove("hidden");
@@ -713,6 +765,7 @@ function getSidePanelHtmlContent() {
                 } else {
                     element.classList.remove("active");
                     timer.classList.remove("active");
+                    taskDisplay.classList.remove("active");
                     controls.classList.remove("active");
                     line1.classList.add("hidden");
                     line2.classList.add("hidden");
@@ -784,6 +837,11 @@ function getSidePanelHtmlContent() {
                 const progressElement = document.getElementById("progress-circle");
                 progressElement.setAttribute('d', pathData);
                 progressElement.setAttribute('fill', progressColor);
+                
+                // Update task displays
+                document.getElementById("stopwatch-task").innerHTML = stopwatch.task || "No task";
+                document.getElementById("pomodoro-task").innerHTML = pomodoro.task || "No task";
+                document.getElementById("session-task").innerHTML = "Session active";
             }
         });
     </script>
