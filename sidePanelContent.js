@@ -152,17 +152,19 @@ function getSidePanelHtmlContent() {
             opacity: 0;
             font-size: 20vw;
             font-weight: bold;
+            z-index: 10;
         }
 
         .pomodoro-visual-timer {
             position: absolute;
             left: 50%;
-            top: 50%;
+            top: 20%;
             transform: translate(-50%, -50%);
             width: 200px;
             height: 200px;
             opacity: 0;
             pointer-events: none;
+            z-index: 1;
         }
 
         .pomodoro-visual-timer.active {
@@ -192,11 +194,11 @@ function getSidePanelHtmlContent() {
             bottom: 0;
             width: 110%;
             height: 100%;
-            transform: translateY(60%);
+            transform: translateY(85%);
         }
 
         .control-buttons.active {
-            z-index: 10;
+            z-index: 20;
             opacity: 1;
             pointer-events: all;
         }
@@ -213,6 +215,7 @@ function getSidePanelHtmlContent() {
             justify-content: center;
             gap: 3vw;
             pointer-events: none;
+            z-index: 20;
         }
 
         .control-buttons button {
@@ -312,15 +315,18 @@ function getSidePanelHtmlContent() {
 
             .timer {
                 font-size: 5rem;
+                z-index: 10;
             }
 
             .pomodoro-visual-timer {
                 width: 180px;
                 height: 180px;
+                top: 35%;
+                z-index: 1;
             }
 
             .controls {
-                transform: translateY(55%);
+                transform: translateY(85%);
                 width: 100%;
             }
 
