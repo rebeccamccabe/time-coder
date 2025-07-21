@@ -186,7 +186,6 @@ function getSidePanelHtmlContent() {
         }
 
         .progress-bar {
-            fill: var(--vscode-button-background);
             stroke: none;
             transition: d 1s ease;
         }
@@ -750,6 +749,18 @@ function getSidePanelHtmlContent() {
                 const centerY = 150;
                 const topY = centerY - radius;
                 
+                // Calculate color based on fracRemaining: green -> yellow -> red
+                let red, green;
+                if (fracRemaining >= 0.5) {
+                    red = Math.round((1 - fracRemaining) * 2 * 255);
+                    green = 255;
+                } else {
+                    red = 255;
+                    green = Math.round(fracRemaining * 2 * 255);
+                }
+                const blue = 0;
+                const progressColor = 'rgb(' + red + ', ' + green + ', ' + blue + ')';
+                
                 let pathData;
                 if (fracRemaining === 0) {
                     pathData = '';
@@ -770,7 +781,9 @@ function getSidePanelHtmlContent() {
                                Z\`;
                 }
                 
-                document.getElementById("progress-circle").setAttribute('d', pathData);
+                const progressElement = document.getElementById("progress-circle");
+                progressElement.setAttribute('d', pathData);
+                progressElement.setAttribute('fill', progressColor);
             }
         });
     </script>
