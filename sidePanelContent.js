@@ -365,27 +365,27 @@ function getSidePanelHtmlContent() {
         <main>
             <!-- Tab Navigation -->
             <div class="tab-container">
-                <div class="tab" id="pomodoro-tab" title="Switch to Pomodoro">
-                    <h1 class="hidden" id="pomodoro-line1">Pom</h1>
+                <div class="tab active" id="pomodoro-tab">
+                    <h1 id="pomodoro-line1">Pom</h1>
                     <span id="pomodoro-emoji">⏰</span>
-                    <h1 class="hidden line2" id="pomodoro-line2">doro</h1>
+                    <h1 class="line2" id="pomodoro-line2">odoro</h1>
                 </div>
-                <div class="tab active" id="stopwatch-tab">
-                    <h1 id="stopwatch-line1">St</h1>
+                <div class="tab" id="stopwatch-tab" title="Switch to Stopwatch">
+                    <h1 class="hidden" id="stopwatch-line1">St</h1>
                     <span id="stopwatch-emoji">⏱</span>
-                    <h1 class="line2" id="stopwatch-line2">pwatch</h1>
+                    <h1 class="hidden line2" id="stopwatch-line2">opwatch</h1>
                 </div>
                 <div class="tab" id="session-tab" title="Switch to Session Timer">
                     <h1 class="hidden" id="session-line1">Se</h1>
                     <span id="session-emoji">⏳</span>
-                    <h1 class="hidden line2" id="session-line2">sion</h1>
+                    <h1 class="hidden line2" id="session-line2">ssion</h1>
                 </div>
             </div>
 
             <!-- Timers -->
             <div class="timers">
-                <div id="stopwatch-display" class="timer active">00:00:00</div>
-                <div id="pomodoro-display" class="timer">00:00:00</div>
+                <div id="stopwatch-display" class="timer">00:00:00</div>
+                <div id="pomodoro-display" class="timer active">00:00:00</div>
                 <div id="session-display" class="timer">00:00:00</div>
                 
                 <!-- Visual Timer for Pomodoro -->
@@ -400,11 +400,11 @@ function getSidePanelHtmlContent() {
                 <!-- Controls -->
 
                 <div class="controls" id="controls">
-                    <div class="control-buttons active" id="stopwatch-buttons">
+                    <div class="control-buttons" id="stopwatch-buttons">
                         <button class="control-btn" id="start-stop-Stopwatch">Start</button>
                         <button class="control-btn" id="resetStopwatch">Reset</button>
                     </div>
-                    <div class="control-buttons" id="pomodoro-buttons">
+                    <div class="control-buttons active" id="pomodoro-buttons">
                         <button class="control-btn" id="adjustPomodoroDecrease">-1 min</button>
                         <button class="control-btn" id="start-stop-Pomodoro">Start</button>
                         <button class="control-btn" id="resetPomodoro">Reset</button>
@@ -683,7 +683,7 @@ function getSidePanelHtmlContent() {
             session: document.getElementById("session-tab"),
         };
 
-        let activeTab = "stopwatch";
+        let activeTab = "pomodoro";
 
         function updateTab(newTab) {
             activeTab = newTab;
